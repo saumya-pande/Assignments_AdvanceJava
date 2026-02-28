@@ -5,11 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.model.Employee;
 import com.example.demo.service.EmployeeService;
+
+import jakarta.websocket.server.PathParam;
 
 @Controller
 public class EmployeeController {
@@ -47,5 +50,27 @@ public class EmployeeController {
 	public String saveEmployee(Employee employee) {
 		employeeService.saveEmployee(employee);
 		return "redirect:/employees";
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String editEmployee(@PathVariable Long id, Model model) {
+
+	    Employee employee = employeeService.getEmployeeById(id);
+	    model.addAttribute("employee", employee);
+	    return "editEmployee";
+	}
+	
+	@PostMapping("/update")
+	public String updateEmployee(Employee employee) {
+
+	    employeeService.saveEmployee(employee);
+	    return "redirect:/employee";
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String deleteEmployee(@PathVariable Long id) {
+
+	    employeeService.deleteEmployeeById(id);
+	    return "redirect:/employee";
 	}
 }

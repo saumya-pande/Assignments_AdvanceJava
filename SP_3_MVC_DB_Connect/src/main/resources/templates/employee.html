@@ -21,6 +21,14 @@
             <td th:text="${item.id}"></td>
             <td th:text="${item.name}"></td>
             <td th:text="${item.city}"></td>
+			<td> <a th:href="@{/editEmployee/{id}(id=${employee.id})}">
+				Edit
+				<a>
+			</td>
+			<td> <a th:href="@{/deleteEmployee/{id}(id=${employee.id})}>
+				Delete
+			<a> 
+			</td>	
         </tr>
     </tbody>
 </table>
