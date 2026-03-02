@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employees</title>
+</head>
+<body>
+
+<h1>Employee Management</h1>
+
+<a href="/leave-requests">Back to Dashboard</a>
+
+<hr>
+
+<h2>Add / Edit Employee</h2>
+
+<form th:action="@{/employees/save}" method="post" th:object="${employee}">
+
+    <input type="hidden" th:field="*{employeeId}" />
+
+    Name:
+    <input type="text" th:field="*{name}" />
+    <br><br>
+
+    Email:
+    <input type="email" th:field="*{email}" />
+    <br><br>
+
+    Department:
+    <input type="text" th:field="*{department}" />
+    <br><br>
+
+    Joining Date:
+    <input type="date" th:field="*{joiningDate}" />
+    <br><br>
+
+    <button type="submit">Save</button>
+</form>
+
+<hr>
+
+<h2>All Employees</h2>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Department</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="emp : ${employees}">
+        <td th:text="${emp.name}"></td>
+        <td th:text="${emp.email}"></td>
+        <td th:text="${emp.department}"></td>
+        <td>
+            <a th:href="@{/employees/edit/{id}(id=${emp.employeeId})}">Edit</a>
+            |
+            <a th:href="@{/employees/delete/{id}(id=${emp.employeeId})}">Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

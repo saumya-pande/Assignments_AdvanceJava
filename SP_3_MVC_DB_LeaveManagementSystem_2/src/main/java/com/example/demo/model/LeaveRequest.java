@@ -3,13 +3,21 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 @Entity
 public class LeaveRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long requestId;
-
+	 /*
+	In Java → LeaveRequest contains an Employee object
+	
+	In Database → Leave_Request table contains employee_id column
+	
+	Hibernate connects both automatically
+	*/
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
@@ -21,6 +29,42 @@ public class LeaveRequest {
     private LocalDate startDate;
     private LocalDate endDate;
     private String status;
+	public Long getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(Long requestId) {
+		this.requestId = requestId;
+	}
+	public Employee getEmployee() {
+		return employee;
+	}
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
+	}
+	public LeaveType getLeaveType() {
+		return leaveType;
+	}
+	public void setLeaveType(LeaveType leaveType) {
+		this.leaveType = leaveType;
+	}
+	public LocalDate getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(LocalDate startDate) {
+		this.startDate = startDate;
+	}
+	public LocalDate getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(LocalDate endDate) {
+		this.endDate = endDate;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-    // getters and setters
+    
 }

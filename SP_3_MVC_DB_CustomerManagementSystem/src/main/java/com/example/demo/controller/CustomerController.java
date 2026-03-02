@@ -37,6 +37,4 @@ public class CustomerController {
 		customerService.saveCustomer(customer);
 		return "redirect:/customers"; 
 	}
-	
-	@
 }

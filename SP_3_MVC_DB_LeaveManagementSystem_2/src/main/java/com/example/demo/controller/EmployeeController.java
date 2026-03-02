@@ -1,54 +1,48 @@
 package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.service.*;
-import com.example.demo.model.LeaveRequest;
+
+import com.example.demo.model.Employee;
+import com.example.demo.service.EmployeeService;
 
 @Controller
-public class LeaveRequestController {
+@RequestMapping("/employees")
+public class EmployeeController {
 
-    private final LeaveRequestService leaveService;
-    private final EmployeeService employeeService;
-    private final LeaveTypeService leaveTypeService;
+    @Autowired
+    private EmployeeService employeeService;
 
-    public LeaveRequestController(LeaveRequestService leaveService,
-                                  EmployeeService employeeService,
-                                  LeaveTypeService leaveTypeService) {
-        this.leaveService = leaveService;
-        this.employeeService = employeeService;
-        this.leaveTypeService = leaveTypeService;
+    @GetMapping
+    public String viewEmployees(Model model) {
+    	model.addAttribute("employees", employeeService.getAllEmployees());
+    	model.addAttribute("employee", new Employee());
+        return "employee";
     }
 
-    @GetMapping("/applyLeave")
-    public String form(Model model) {
-        model.addAttribute("leaveRequest", new LeaveRequest());
-        model.addAttribute("employees", employeeService.getAll());
-        model.addAttribute("leaveTypes", leaveTypeService.getAll());
-        return "apply-leave";
+    @GetMapping("/add")
+    public String showAddForm(Model model) {
+        model.addAttribute("employee", new Employee());
+        return "employee";
     }
 
-    @PostMapping("/saveLeave")
-    public String save(@ModelAttribute LeaveRequest request) {
-        leaveService.applyLeave(request);
-        return "redirect:/leaveRequests";
+    @PostMapping("/save")
+    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
+        employeeService.addNewEmployee(employee);
+        return "redirect:/employees";
     }
 
-    @GetMapping("/leaveRequests")
-    public String list(Model model) {
-        model.addAttribute("requests", leaveService.getAll());
-        return "leave-list";
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        model.addAttribute("employee", employeeService.getEmployeeById(id));
+        return "employee";
     }
 
-    @GetMapping("/approve/{id}")
-    public String approve(@PathVariable Long id) {
-        leaveService.approve(id);
-        return "redirect:/leaveRequests";
-    }
-
-    @GetMapping("/reject/{id}")
-    public String reject(@PathVariable Long id) {
-        leaveService.reject(id);
-        return "redirect:/leaveRequests";
+    @GetMapping("/delete/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return "redirect:/employees";
     }
 }

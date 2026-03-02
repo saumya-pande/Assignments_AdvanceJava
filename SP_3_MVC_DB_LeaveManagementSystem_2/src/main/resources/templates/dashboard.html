@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Leave Management Dashboard</title>
+</head>
+<body>
+
+<h1>Leave Management System</h1>
+
+<hr>
+
+<a href="/employees">Manage Employees</a>
+
+<hr>
+
+<h2>Add Leave Type</h2>
+<form th:action="@{/leave-types/save}" method="post" th:object="${leaveType}">
+    Leave Name:
+    <input type="text" th:field="*{leaveName}" />
+    <br><br>
+
+    Max Days Allowed:
+    <input type="number" th:field="*{maxDaysAllowed}" />
+    <br><br>
+
+    <button type="submit">Add Leave Type</button>
+</form>
+
+<hr>
+
+<h2>Apply Leave</h2>
+<form th:action="@{/leave-requests/save}" method="post" th:object="${leaveRequest}">
+
+    Employee:
+    <select th:field="*{employee.employeeId}">
+        <option th:each="emp : ${employees}"
+                th:value="${emp.employeeId}"
+                th:text="${emp.name}">
+        </option>
+    </select>
+    <br><br>
+
+    Leave Type:
+    <select th:field="*{leaveType.leaveTypeId}">
+        <option th:each="type : ${leaveTypes}"
+                th:value="${type.leaveTypeId}"
+                th:text="${type.leaveName}">
+        </option>
+    </select>
+    <br><br>
+
+    Start Date:
+    <input type="date" th:field="*{startDate}" />
+    <br><br>
+
+    End Date:
+    <input type="date" th:field="*{endDate}" />
+    <br><br>
+
+    <button type="submit">Apply Leave</button>
+</form>
+
+<hr>
+
+<h2>All Leave Requests</h2>
+
+<table border="1">
+    <tr>
+        <th>Employee</th>
+        <th>Leave Type</th>
+        <th>Start</th>
+        <th>End</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    <tr th:each="req : ${leaveRequests}">
+        <td th:text="${req.employee.name}"></td>
+        <td th:text="${req.leaveType.leaveName}"></td>
+        <td th:text="${req.startDate}"></td>
+        <td th:text="${req.endDate}"></td>
+        <td th:text="${req.status}"></td>
+        <td>
+            <a th:href="@{/leave-requests/approve/{id}(id=${req.requestId})}">Approve</a>
+            |
+            <a th:href="@{/leave-requests/delete/{id}(id=${req.requestId})}">Delete</a>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
