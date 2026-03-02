@@ -73,7 +73,6 @@
         <th>Status</th>
         <th>Action</th>
     </tr>
-
     <tr th:each="req : ${leaveRequests}">
         <td th:text="${req.employee.name}"></td>
         <td th:text="${req.leaveType.leaveName}"></td>
